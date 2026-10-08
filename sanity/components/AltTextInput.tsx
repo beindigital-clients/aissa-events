@@ -36,12 +36,12 @@ function assetRefToUrl(ref: string, projectId: string, dataset: string): string 
 }
 
 export function AltTextInput(props: StringInputProps) {
-  const { onChange, renderDefault } = props;
+  const { onChange, renderDefault, path } = props;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Récupère la valeur de l'image parente (le document imageWithAlt)
-  const imageValue = useFormValue([]) as SanityImageValue | null;
+  const imageValue = useFormValue(path.slice(0, -1)) as SanityImageValue | null;
   const client = useClient({ apiVersion: "2026-05-09" });
 
   const handleGenerate = useCallback(async () => {
