@@ -46,14 +46,14 @@ function sanitizeAnchor(anchor: string | null | undefined): string | null {
 
 /**
  * En aperçu (draft mode), les chaînes Sanity portent des marqueurs stega
- * « click-to-edit » : un clic sur un bouton ouvrait le document source au lieu
- * de suivre le lien, et les marqueurs polluaient les href. On nettoie donc
- * toutes les chaînes d'une CTA avant de les résoudre.
+ * « click-to-edit ». On nettoie les valeurs qui servent d'ADRESSE (chemin,
+ * URL, ancre), sinon les marqueurs corrompent le href ou font rejeter la CTA.
+ * Le LIBELLÉ garde ses marqueurs : un clic sur un bouton ouvre son champ à
+ * modifier dans le Studio.
  */
 function cleanCta(cta: CtaShape): CtaShape {
   return {
     ...cta,
-    label: stegaClean(cta.label),
     internalPath: stegaClean(cta.internalPath),
     externalUrl: stegaClean(cta.externalUrl),
     anchor: stegaClean(cta.anchor),
