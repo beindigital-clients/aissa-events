@@ -9,6 +9,7 @@ import { renderInlineItalic } from "@/lib/sanity/text";
 import { ParticulierContactForm } from "./particulier-contact-form";
 import { ProContactForm } from "./pro-contact-form";
 import type { HomePageQueryResult, SiteSettingsQueryResult } from "@/sanity.types";
+import { stegaClean } from "@sanity/client/stega";
 
 type ContactData = NonNullable<HomePageQueryResult>["contact"];
 type Audience = "particulier" | "pro";
@@ -38,7 +39,9 @@ export function ContactSection({
 
   // Build meta from siteSettings
   const phoneDisplay = settings?.phone;
-  const phoneHref = settings?.phoneHref ?? settings?.phone?.replace(/\s+/g, "");
+  const phoneHref = stegaClean(
+    settings?.phoneHref ?? settings?.phone?.replace(/\s+/g, ""),
+  );
   const email = settings?.email;
   const addr = settings?.address;
   const fullAddress = [

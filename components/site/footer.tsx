@@ -69,7 +69,9 @@ export function SiteFooter({ settings }: { settings: SiteSettingsQueryResult }) 
   const addressLines = formatAddressLines(settings);
   const social = settings?.social?.items ?? [];
   const phoneDisplay = settings?.phone;
-  const phoneHref = settings?.phoneHref ?? settings?.phone?.replace(/\s+/g, "");
+  const phoneHref = stegaClean(
+    settings?.phoneHref ?? settings?.phone?.replace(/\s+/g, ""),
+  );
   const email = settings?.email;
   const tagline = settings?.footerTagline;
   const contactTitle = settings?.footerContactTitle ?? "Contact";
