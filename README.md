@@ -29,6 +29,13 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Déploiement (production)
+
+- Dépôt : `beindigital-clients/aissa-events` (ancienne adresse `be-in-digital/aissa-events`, qui redirige ici).
+- Le site en ligne (`aissaevents.com`) est servi par un projet Vercel connecté à la branche `main` de ce dépôt : chaque fusion sur `main` doit déclencher un build de production.
+- Si une fusion ne redéploie pas `aissaevents.com`, vérifier dans Vercel (Settings → Git) que le projet qui porte le domaine est bien connecté à ce dépôt.
+- Le Studio Sanity est servi sur `/studio` du même site ; l'« Aperçu en direct » nécessite la variable `SANITY_API_READ_TOKEN` côté Vercel.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
