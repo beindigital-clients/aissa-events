@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "./logo";
 import { resolveCta } from "@/lib/sanity/cta";
 import type { SiteSettingsQueryResult } from "@/sanity.types";
+import { stegaClean } from "@sanity/client/stega";
 
 const POWERED_BY = {
   label: "Powered by Be in Digital",
@@ -26,7 +27,7 @@ function buildFooterColumns(settings: SiteSettingsQueryResult): FooterColumn[] {
             const resolved = resolveCta(link?.cta ?? null);
             if (!link?.label || !resolved) return null;
             return {
-              label: link.label,
+              label: stegaClean(link.label),
               href: resolved.href,
               external: resolved.external,
             };
@@ -46,7 +47,7 @@ function buildLegalLinks(settings: SiteSettingsQueryResult) {
       const resolved = resolveCta(link?.cta ?? null);
       if (!link?.label || !resolved) return null;
       return {
-        label: link.label,
+        label: stegaClean(link.label),
         href: resolved.href,
         external: resolved.external,
       };
@@ -159,12 +160,12 @@ export function SiteFooter({ settings }: { settings: SiteSettingsQueryResult }) 
                     <span key={s.url}>
                       {i > 0 && <span className="text-cream/60">·</span>}{" "}
                       <a
-                        href={s.url}
+                        href={stegaClean(s.url)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="border-b border-cream/30 text-cream transition-colors hover:border-gold-soft"
                       >
-                        {s.label || s.platform}
+                        {stegaClean(s.label || s.platform)}
                       </a>{" "}
                     </span>
                   );

@@ -1,3 +1,5 @@
+import { stegaClean } from "@sanity/client/stega";
+
 export type CtaShape = {
   label: string | null;
   type: "anchor" | "booking" | "calendly" | "external" | "form" | "internal" | null;
@@ -42,11 +44,30 @@ function sanitizeAnchor(anchor: string | null | undefined): string | null {
   return /^[a-z0-9_-]+$/i.test(anchor) ? anchor : null;
 }
 
-export function resolveCta(cta: CtaShape | null | undefined): ResolvedCta | null {
-  if (!cta?.label) return null;
+/**
+ * En aperçu (draft mode), les chaînes Sanity portent des marqueurs stega
+ * « click-to-edit » : un clic sur un bouton ouvrait le document source au lieu
+ * de suivre le lien, et les marqueurs polluaient les href. On nettoie donc
+ * toutes les chaînes d'une CTA avant de les résoudre.
+ */
+function cleanCta(cta: CtaShape): CtaShape {
+  return {
+    ...cta,
+    label: stegaClean(cta.label),
+    internalPath: stegaClean(cta.internalPath),
+    externalUrl: stegaClean(cta.externalUrl),
+    anchor: stegaClean(cta.anchor),
+  };
+}
+
+export function resolveCta(input: CtaShape | null | undefined): ResolvedCta | null {
+  if (!input?.label) return null;
+  const cta = cleanCta(input);
+  const label = cta.label;
+  if (!label) return null;
 
   const variant = cta.variant ?? "primary";
-  const baseExternal = { label: cta.label, external: true, variant };
+  const baseExternal = { label, external: true, variant };
 
   switch (cta.type) {
     // `booking`/`calendly` conservés pour rétro-compat des documents Sanity
@@ -55,7 +76,7 @@ export function resolveCta(cta: CtaShape | null | undefined): ResolvedCta | null
     case "booking":
     case "calendly":
       return {
-        label: cta.label,
+        label,
         href: "/#contact",
         external: false,
         variant,
@@ -72,7 +93,7 @@ export function resolveCta(cta: CtaShape | null | undefined): ResolvedCta | null
       const safePath = sanitizeInternalPath(cta.internalPath);
       if (!safePath) return null;
       return {
-        label: cta.label,
+        label,
         href: safePath,
         external: false,
         variant,
@@ -82,7 +103,7 @@ export function resolveCta(cta: CtaShape | null | undefined): ResolvedCta | null
       const safeAnchor = sanitizeAnchor(cta.anchor);
       if (!safeAnchor) return null;
       return {
-        label: cta.label,
+        label,
         href: `#${safeAnchor}`,
         external: false,
         variant,
@@ -92,7 +113,7 @@ export function resolveCta(cta: CtaShape | null | undefined): ResolvedCta | null
       // `#contact` n'existe que sur la home — on force la navigation
       // cross-page pour que le CTA fonctionne depuis n'importe quelle page.
       return {
-        label: cta.label,
+        label,
         href: "/#contact",
         external: false,
         variant,

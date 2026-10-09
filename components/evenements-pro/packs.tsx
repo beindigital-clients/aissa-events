@@ -6,6 +6,7 @@ import { Eyebrow } from "@/components/home/eyebrow";
 import { resolveCta } from "@/lib/sanity/cta";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import type { EvenementPageQueryResult } from "@/sanity.types";
+import { stegaClean } from "@sanity/client/stega";
 
 type PacksData = NonNullable<EvenementPageQueryResult>["packs"];
 
@@ -53,7 +54,7 @@ export function EvenementPacks({
       if (!cta && !quoteAnchor) return null;
       const priceLabel = p.priceLabel ?? (p.priceFrom ? `${p.priceFrom} €` : "Sur devis");
       const ctaHref = quoteAnchor
-        ? `?pack=${encodeURIComponent(p.title ?? "")}${quoteAnchor}`
+        ? `?pack=${encodeURIComponent(stegaClean(p.title ?? ""))}${quoteAnchor}`
         : (cta?.href ?? "#");
       return {
         num: String(i + 1).padStart(2, "0"),

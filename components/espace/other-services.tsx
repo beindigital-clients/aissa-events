@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import type { EspaceEventsPageQueryResult } from "@/sanity.types";
+import { stegaClean } from "@sanity/client/stega";
 
 type OtherServicesData = NonNullable<EspaceEventsPageQueryResult>["otherServices"];
 
@@ -32,13 +33,13 @@ export function OtherServices({ data }: { data?: OtherServicesData }) {
     .map((item): Service | null => {
       if (!item?.ctaHref || !item?.titleStart) return null;
       return {
-        href: item.ctaHref,
+        href: stegaClean(item.ctaHref),
         eyebrow: item.eyebrow ?? "",
         titleStart: item.titleStart,
         titleItalic: item.titleItalic ?? "",
         desc: item.description ?? "",
         tags: item.tags ?? [],
-        cta: item.ctaLabel ?? "En savoir plus",
+        cta: stegaClean(item.ctaLabel ?? "En savoir plus"),
       };
     })
     .filter((x): x is Service => x !== null);
