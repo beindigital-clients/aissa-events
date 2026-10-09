@@ -4,17 +4,18 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 /**
- * Garantit qu'en « Aperçu en direct » (draft mode) un clic sur un lien navigue
- * toujours vers sa page.
+ * En « Aperçu en direct » (draft mode), garantit que le MENU du header navigue
+ * vers sa page au clic — et uniquement lui.
  *
  * Contexte : l'éditeur visuel de Sanity pose un gestionnaire « cliquer pour
- * modifier » (phase de capture) sur chaque élément dont le texte est marqué.
- * Tout lien qui contient — ou est contenu dans — un tel élément voit donc son
- * clic détourné vers l'édition du document, et l'éditeur ne peut plus passer
- * d'une page à l'autre. On intercepte le clic AVANT ces gestionnaires.
+ * modifier » (phase de capture) sur chaque élément dont le texte est marqué,
+ * donc un clic sur « Mariage » ouvrait les Réglages du site au lieu de
+ * naviguer. On intercepte le clic AVANT ce gestionnaire, mais seulement pour
+ * les liens marqués `data-preview-nav` (menu desktop et mobile).
+ * Tout le reste — boutons, cartes, pied de page — garde le « cliquer pour
+ * modifier » : un clic ouvre le champ à éditer.
  *
- * - Alt / Option / Cmd / Ctrl / Maj + clic : comportement natif inchangé
- *   (Alt + clic reste le raccourci Sanity pour suivre un lien).
+ * - Alt / Option / Cmd / Ctrl / Maj + clic : comportement natif inchangé.
  * - Liens internes : navigation Next.js (router.push).
  * - Ancres, tel:, mailto:, liens externes, nouvel onglet : navigation native.
  */
@@ -30,7 +31,9 @@ export function PreviewLinkNavigation() {
 
       const target = event.target;
       if (!(target instanceof Element)) return;
-      const anchor = target.closest<HTMLAnchorElement>("a[href]");
+      const anchor = target.closest<HTMLAnchorElement>(
+        "[data-preview-nav] a[href]",
+      );
       if (!anchor) return;
 
       // Coupe les gestionnaires « cliquer pour modifier » situés plus bas.

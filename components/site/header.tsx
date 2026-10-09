@@ -74,7 +74,7 @@ export function SiteHeader({ settings }: { settings: SiteSettingsQueryResult }) 
           <Logo tone="gold" className="text-[11px] sm:text-[13px]" />
         </Link>
 
-        <nav className="hidden items-center gap-9 lg:flex">
+        <nav data-preview-nav className="hidden items-center gap-9 lg:flex">
           {navItems.map((item) => {
             const active = isActiveRoute(item.href, pathname);
             return (

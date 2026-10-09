@@ -27,7 +27,7 @@ function buildFooterColumns(settings: SiteSettingsQueryResult): FooterColumn[] {
             const resolved = resolveCta(link?.cta ?? null);
             if (!link?.label || !resolved) return null;
             return {
-              label: stegaClean(link.label),
+              label: link.label,
               href: resolved.href,
               external: resolved.external,
             };
@@ -47,7 +47,7 @@ function buildLegalLinks(settings: SiteSettingsQueryResult) {
       const resolved = resolveCta(link?.cta ?? null);
       if (!link?.label || !resolved) return null;
       return {
-        label: stegaClean(link.label),
+        label: link.label,
         href: resolved.href,
         external: resolved.external,
       };
@@ -167,7 +167,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsQueryResult }) 
                         rel="noopener noreferrer"
                         className="border-b border-cream/30 text-cream transition-colors hover:border-gold-soft"
                       >
-                        {stegaClean(s.label || s.platform)}
+                        {s.label || s.platform}
                       </a>{" "}
                     </span>
                   );

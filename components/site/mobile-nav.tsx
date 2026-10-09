@@ -56,7 +56,7 @@ export function MobileNav({
             </DialogPrimitive.Close>
           </div>
 
-          <nav className="mt-12 flex flex-col gap-2">
+          <nav data-preview-nav className="mt-12 flex flex-col gap-2">
             {navItems.map((item) => {
               const active = isActiveRoute(item.href, pathname);
               return (

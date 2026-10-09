@@ -39,7 +39,7 @@ export function OtherServices({ data }: { data?: OtherServicesData }) {
         titleItalic: item.titleItalic ?? "",
         desc: item.description ?? "",
         tags: item.tags ?? [],
-        cta: stegaClean(item.ctaLabel ?? "En savoir plus"),
+        cta: item.ctaLabel ?? "En savoir plus",
       };
     })
     .filter((x): x is Service => x !== null);
