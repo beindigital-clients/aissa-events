@@ -8,6 +8,7 @@ import { buildContactUrl } from "@/lib/contact/cta-url";
 import { resolveCta } from "@/lib/sanity/cta";
 import { renderInlineItalic } from "@/lib/sanity/text";
 import type { MariagePageQueryResult } from "@/sanity.types";
+import { stegaClean } from "@sanity/client/stega";
 
 type PacksData = NonNullable<MariagePageQueryResult>["packs"];
 
@@ -146,7 +147,7 @@ export function MariagePacks({ data }: { data?: PacksData }) {
             cta?.href ??
             buildContactUrl({
               source: "mariage",
-              content: `pack-${(p.title ?? "").toLowerCase().replace(/\s+/g, "-")}`,
+              content: `pack-${stegaClean(p.title ?? "").toLowerCase().replace(/\s+/g, "-")}`,
             }),
           ctaExternal: cta?.external ?? true,
         };

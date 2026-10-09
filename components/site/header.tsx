@@ -39,9 +39,7 @@ function buildNavItems(settings: SiteSettingsQueryResult): NavItem[] {
 }
 
 function buildHeaderCta(settings: SiteSettingsQueryResult): ResolvedCta {
-  const cta = resolveCta(settings?.headerCta ?? null);
-  if (!cta) return FALLBACK_HEADER_CTA;
-  return { ...cta, label: stegaClean(cta.label), href: stegaClean(cta.href) };
+  return resolveCta(settings?.headerCta ?? null) ?? FALLBACK_HEADER_CTA;
 }
 
 export function SiteHeader({ settings }: { settings: SiteSettingsQueryResult }) {
