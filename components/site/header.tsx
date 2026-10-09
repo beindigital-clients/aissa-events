@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { stegaClean } from "@sanity/client/stega";
 import { MobileNav } from "./mobile-nav";
 import { Logo } from "./logo";
 import { FALLBACK_NAV, FALLBACK_HEADER_CTA, type NavItem } from "./nav-config";
@@ -25,9 +26,12 @@ function buildNavItems(settings: SiteSettingsQueryResult): NavItem[] {
     .map((item) => {
       const resolved = resolveCta(item?.cta ?? null);
       if (!item?.label || !resolved) return null;
+      // stegaClean : en aperçu (draft mode) les textes portent des marqueurs
+      // « click-to-edit » ; sans nettoyage, cliquer sur un lien du menu ouvre
+      // les Réglages du site au lieu de naviguer vers la page.
       return {
-        label: item.label,
-        href: resolved.href,
+        label: stegaClean(item.label),
+        href: stegaClean(resolved.href),
         external: resolved.external,
       } satisfies NavItem;
     })
@@ -35,7 +39,9 @@ function buildNavItems(settings: SiteSettingsQueryResult): NavItem[] {
 }
 
 function buildHeaderCta(settings: SiteSettingsQueryResult): ResolvedCta {
-  return resolveCta(settings?.headerCta ?? null) ?? FALLBACK_HEADER_CTA;
+  const cta = resolveCta(settings?.headerCta ?? null);
+  if (!cta) return FALLBACK_HEADER_CTA;
+  return { ...cta, label: stegaClean(cta.label), href: stegaClean(cta.href) };
 }
 
 export function SiteHeader({ settings }: { settings: SiteSettingsQueryResult }) {
