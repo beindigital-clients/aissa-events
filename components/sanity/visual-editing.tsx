@@ -1,5 +1,6 @@
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
+import { PreviewLinkNavigation } from "./preview-link-navigation";
 
 /**
  * Affiche l'overlay Visual Editing de Sanity uniquement quand le draft mode
@@ -11,5 +12,10 @@ import { VisualEditing } from "next-sanity/visual-editing";
 export async function VisualEditingOverlay() {
   const { isEnabled } = await draftMode();
   if (!isEnabled) return null;
-  return <VisualEditing />;
+  return (
+    <>
+      <VisualEditing />
+      <PreviewLinkNavigation />
+    </>
+  );
 }

@@ -25,6 +25,14 @@ export function MobileNav({
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
+  // Ferme le menu après toute navigation (en aperçu, le clic est géré hors du
+  // Link, donc le onClick de fermeture ne se déclenche pas toujours).
+  const [lastPathname, setLastPathname] = useState(pathname);
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname);
+    setOpen(false);
+  }
+
   return (
     <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
       <DialogPrimitive.Trigger
