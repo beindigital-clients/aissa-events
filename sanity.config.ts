@@ -1,6 +1,10 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
-import { presentationTool } from "sanity/presentation";
+import {
+  presentationTool,
+  defineDocuments,
+  defineLocations,
+} from "sanity/presentation";
 import { visionTool } from "@sanity/vision";
 import { muxInput } from "sanity-plugin-mux-input";
 import { schemaTypes } from "./sanity/schemas";
@@ -10,6 +14,20 @@ import { dropboxAssetSource } from "./sanity/assetSources/dropbox";
 import { env } from "./env";
 
 const isDev = process.env.NODE_ENV === "development";
+
+/**
+ * Pages « singleton » : type de document Sanity → route du site.
+ * Sert à l'Aperçu en direct : choisir une page dans le Studio ouvre sa route,
+ * et naviguer sur une route ouvre le bon document à éditer.
+ */
+const PAGE_ROUTES = [
+  { type: "homePage", route: "/", title: "Accueil" },
+  { type: "espaceEventsPage", route: "/espace-events", title: "Espace Events" },
+  { type: "evenementPage", route: "/entreprises", title: "Entreprises" },
+  { type: "mariagePage", route: "/mariage", title: "Mariage" },
+  { type: "realisationsPage", route: "/realisations", title: "Réalisations" },
+  { type: "blogPage", route: "/blog", title: "Blog" },
+] as const;
 
 const PREVIEW_ORIGIN =
   typeof window === "undefined"
@@ -26,6 +44,20 @@ export default defineConfig({
     structureTool({ structure }),
     presentationTool({
       title: "Aperçu en direct",
+      resolve: {
+        mainDocuments: defineDocuments(
+          PAGE_ROUTES.map(({ type, route }) => ({
+            route,
+            filter: `_type == "${type}"`,
+          })),
+        ),
+        locations: Object.fromEntries(
+          PAGE_ROUTES.map(({ type, route, title }) => [
+            type,
+            defineLocations({ locations: [{ title, href: route }] }),
+          ]),
+        ),
+      },
       previewUrl: {
         origin: PREVIEW_ORIGIN,
         preview: "/",
