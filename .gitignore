@@ -53,3 +53,10 @@ next-env.d.ts
 
 # Local AI assistant state
 .claude/
+
+# Graphify : on versionne graph.json, GRAPH_REPORT.md et manifest.json ;
+# le reste (visualisation, cache, suivi de coût, fichiers propres à la machine) est local.
+graphify-out/graph.html
+graphify-out/cache/
+graphify-out/cost.json
+graphify-out/.graphify_*

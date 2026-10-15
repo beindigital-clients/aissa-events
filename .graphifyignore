@@ -1,0 +1,12 @@
+# Fichiers exclus du graphe Graphify (syntaxe .gitignore)
+
+# Médias statiques : aucune valeur pour comprendre le code
+public/
+app/icon.svg
+app/apple-icon.png
+
+# Fichiers générés ou de cache
+sanity.types.ts
+sanity/extract.json
+.sanity-image-cache.json
+pnpm-lock.yaml
