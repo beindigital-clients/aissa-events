@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { env } from "@/env";
 import { VisualEditingOverlay } from "@/components/sanity/visual-editing";
 import { SanityLiveWrapper } from "@/components/sanity/live-wrapper";
+import { LiveErrorBoundary } from "@/components/sanity/live-error-boundary";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -81,9 +82,11 @@ export default function RootLayout({
             Sous cacheComponents, sanityFetch lit draftMode() + cookies() (donc
             dynamique) et doit obligatoirement vivre dans un Suspense. */}
         <Suspense fallback={null}>{children}</Suspense>
-        <Suspense fallback={null}>
-          <SanityLiveWrapper />
-        </Suspense>
+        <LiveErrorBoundary>
+          <Suspense fallback={null}>
+            <SanityLiveWrapper />
+          </Suspense>
+        </LiveErrorBoundary>
         <Suspense fallback={null}>
           <VisualEditingOverlay />
         </Suspense>
